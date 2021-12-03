@@ -16,6 +16,19 @@ export function generateQueryKey(node: OperationDefinitionNode, hasRequiredVaria
   return `variables === undefined ? ['${node.name.value}'] : ['${node.name.value}', variables]`;
 }
 
+export function generateInfiniteQueryKeyMaker(
+  node: OperationDefinitionNode,
+  operationName: string,
+  operationVariablesTypes: string,
+  hasRequiredVariables: boolean
+) {
+  const signature = generateQueryVariablesSignature(hasRequiredVariables, operationVariablesTypes);
+  return `\nuseInfinite${operationName}.getKey = (${signature}) => ${generateInfiniteQueryKey(
+    node,
+    hasRequiredVariables
+  )};\n`;
+}
+
 export function generateQueryKeyMaker(
   node: OperationDefinitionNode,
   operationName: string,
@@ -31,5 +44,5 @@ export function generateMutationKey(node: OperationDefinitionNode): string {
 }
 
 export function generateMutationKeyMaker(node: OperationDefinitionNode, operationName: string) {
-  return `\nuse${operationName}.getKey = () => ${generateMutationKey(node)}};\n`;
+  return `\nuse${operationName}.getKey = () => ${generateMutationKey(node)};\n`;
 }

@@ -6,7 +6,7 @@ import {
   getConfigValue,
 } from '@graphql-codegen/visitor-plugin-common';
 import { GraphQLSchema, OperationDefinitionNode } from 'graphql';
-import { generateMutationKeyMaker, generateQueryKeyMaker } from './variables-generator';
+import { generateInfiniteQueryKeyMaker, generateMutationKeyMaker, generateQueryKeyMaker } from './variables-generator';
 
 import { CustomMapperFetcher } from './fetcher-custom-mapper';
 import { FetchFetcher } from './fetcher-fetch';
@@ -168,6 +168,14 @@ export class ReactQueryVisitor extends ClientSideBaseVisitor<ReactQueryRawPlugin
       }
       if (this.config.exposeQueryKeys) {
         query += `\n${generateQueryKeyMaker(node, operationName, operationVariablesTypes, hasRequiredVariables)};\n`;
+      }
+      if (this.config.addInfiniteQuery && this.config.exposeQueryKeys) {
+        query += `\n${generateInfiniteQueryKeyMaker(
+          node,
+          operationName,
+          operationVariablesTypes,
+          hasRequiredVariables
+        )};\n`;
       }
       if (this.config.addInfiniteQuery) {
         query += `\n${this.fetcher.generateInfiniteQueryHook(
