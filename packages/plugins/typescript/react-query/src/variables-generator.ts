@@ -23,10 +23,10 @@ export function generateInfiniteQueryKeyMaker(
   hasRequiredVariables: boolean
 ) {
   const signature = generateQueryVariablesSignature(hasRequiredVariables, operationVariablesTypes);
-  return `\nuseInfinite${operationName}.getKey = (${signature}) => ${generateInfiniteQueryKey(
+  return `useInfinite${operationName}.getKey = (${signature}) => ${generateInfiniteQueryKey(
     node,
     hasRequiredVariables
-  )};\n`;
+  )}`;
 }
 
 export function generateQueryKeyMaker(
@@ -36,7 +36,7 @@ export function generateQueryKeyMaker(
   hasRequiredVariables: boolean
 ) {
   const signature = generateQueryVariablesSignature(hasRequiredVariables, operationVariablesTypes);
-  return `\nuse${operationName}.getKey = (${signature}) => ${generateQueryKey(node, hasRequiredVariables)};\n`;
+  return `use${operationName}.getKey = (${signature}) => ${generateQueryKey(node, hasRequiredVariables)}`;
 }
 
 export function generateMutationKey(node: OperationDefinitionNode): string {
@@ -44,5 +44,5 @@ export function generateMutationKey(node: OperationDefinitionNode): string {
 }
 
 export function generateMutationKeyMaker(node: OperationDefinitionNode, operationName: string) {
-  return `\nuse${operationName}.getKey = () => ${generateMutationKey(node)};\n`;
+  return `use${operationName}.getKey = () => ${generateMutationKey(node)}`;
 }

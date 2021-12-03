@@ -169,14 +169,6 @@ export class ReactQueryVisitor extends ClientSideBaseVisitor<ReactQueryRawPlugin
       if (this.config.exposeQueryKeys) {
         query += `\n${generateQueryKeyMaker(node, operationName, operationVariablesTypes, hasRequiredVariables)};\n`;
       }
-      if (this.config.addInfiniteQuery && this.config.exposeQueryKeys) {
-        query += `\n${generateInfiniteQueryKeyMaker(
-          node,
-          operationName,
-          operationVariablesTypes,
-          hasRequiredVariables
-        )};\n`;
-      }
       if (this.config.addInfiniteQuery) {
         query += `\n${this.fetcher.generateInfiniteQueryHook(
           node,
@@ -186,6 +178,14 @@ export class ReactQueryVisitor extends ClientSideBaseVisitor<ReactQueryRawPlugin
           operationVariablesTypes,
           hasRequiredVariables
         )}\n`;
+      }
+      if (this.config.addInfiniteQuery && this.config.exposeQueryKeys) {
+        query += `\n${generateInfiniteQueryKeyMaker(
+          node,
+          operationName,
+          operationVariablesTypes,
+          hasRequiredVariables
+        )};\n`;
       }
 
       // The reason we're looking at the private field of the CustomMapperFetcher to see if it's a react hook
@@ -212,7 +212,7 @@ export class ReactQueryVisitor extends ClientSideBaseVisitor<ReactQueryRawPlugin
         hasRequiredVariables
       );
       if (this.config.exposeMutationKeys) {
-        query += generateMutationKeyMaker(node, operationName);
+        query += `\n${generateMutationKeyMaker(node, operationName)};\n`;
       }
       if (this.config.exposeFetcher && !(this.fetcher as any)._isReactHook) {
         query += this.fetcher.generateFetcherFetch(
